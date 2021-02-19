@@ -13314,6 +13314,20 @@ function make_xlsx_lib(XLSX){
 		return o + '</mergeCells>';
 	}
 
+	function write_ws_xml_datavalidation(validations) {
+		var o = '<dataValidations>';
+		for(var i = 0; i < validations.length; i++) {
+			var validation = validations[i];
+				if (validation.sqref && validation.values) {
+					o += '<dataValidation type="list" allowBlank="1" sqref="' + validation.sqref + '">';
+					o += '<formula1>&quot;' + validation.values + '&quot;</formula1>';
+					o += '</dataValidation>';
+				}
+			}
+			o += '</dataValidations>';
+		return o;
+	}
+
 	/* 18.3.1.82-3 sheetPr CT_ChartsheetPr / CT_SheetPr */
 	function parse_ws_xml_sheetpr(sheetPr, s, wb, idx) {
 		var data = parsexmltag(sheetPr);
@@ -13781,7 +13795,9 @@ function make_xlsx_lib(XLSX){
 
 		/* phoneticPr */
 		/* conditionalFormatting */
+
 		/* dataValidations */
+		if(ws['!dataValidation'] != null) o[o.length] = write_ws_xml_datavalidation(ws['!dataValidation']);
 
 		var relc = -1, rel, rId = -1;
 		if(ws['!links'].length > 0) {
