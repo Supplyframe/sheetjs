@@ -53,6 +53,5 @@ before_install:
   - "npm install jsdom@11.x"
 before_script:
   - "make init"
-  - "cd test_files; make all; cd -"
 after_success:
 #  - "make coveralls-spin"
